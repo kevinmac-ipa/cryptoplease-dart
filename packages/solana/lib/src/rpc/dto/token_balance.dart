@@ -9,6 +9,7 @@ class TokenBalance {
   const TokenBalance({
     required this.accountIndex,
     required this.mint,
+    required this.owner,
     required this.uiTokenAmount,
   });
 
@@ -21,6 +22,9 @@ class TokenBalance {
 
   /// Pubkey of the token's mint.
   final String mint;
+
+  /// Receiver's Address.
+  final String owner;
 
   /// Token balance
   final TokenAmount uiTokenAmount;

@@ -30,12 +30,10 @@ extension RpcClientExt on RpcClient {
     Ed25519HDPublicKey address, {
     int limit = 10,
     Commitment? commitment,
+    String? before,
   }) async {
-    final signatures = await getSignaturesForAddress(
-      address.toBase58(),
-      limit: limit,
-      commitment: commitment,
-    );
+    final signatures = await getSignaturesForAddress(address.toBase58(),
+        limit: limit, commitment: commitment, before: before);
 
     return getMultipleTransactions(
       signatures,

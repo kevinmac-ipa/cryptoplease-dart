@@ -9,6 +9,7 @@ part of 'token_balance.dart';
 TokenBalance _$TokenBalanceFromJson(Map<String, dynamic> json) => TokenBalance(
       accountIndex: json['accountIndex'] as int,
       mint: json['mint'] as String,
+      owner: json['owner'] as String,
       uiTokenAmount:
           TokenAmount.fromJson(json['uiTokenAmount'] as Map<String, dynamic>),
     );
