@@ -20,6 +20,18 @@ extension RpcClientExt on RpcClient {
     );
   }
 
+  Future<SignedTx> signMessage(
+    Message message,
+    List<Ed25519HDKeyPair> signers, {
+    RecentBlockhash? blockhash,
+    Commitment commitment = Commitment.finalized,
+  }) async {
+    final recentBlockhash =
+        blockhash ?? await getRecentBlockhash(commitment: commitment);
+
+    return signTransaction(recentBlockhash, message, signers);
+  }
+
   /// Get the [limit] most recent transactions for the [address] account
   ///
   /// For [commitment] parameter description [see this document][see this document]
@@ -29,16 +41,25 @@ extension RpcClientExt on RpcClient {
   Future<Iterable<TransactionDetails>> getTransactionsList(
     Ed25519HDPublicKey address, {
     int limit = 10,
-    Commitment? commitment,
     String? before,
+    String? until,
+    Commitment? commitment,
+    Encoding? encoding,
   }) async {
-    final signatures = await getSignaturesForAddress(address.toBase58(),
-        limit: limit, commitment: commitment, before: before);
+    final signatures = await getSignaturesForAddress(
+      address.toBase58(),
+      limit: limit,
+      before: before,
+      until: until,
+      commitment: commitment,
+    );
+
+    if (signatures.isEmpty) return [];
 
     return getMultipleTransactions(
       signatures,
       commitment: commitment,
-      encoding: Encoding.jsonParsed,
+      encoding: encoding ?? Encoding.jsonParsed,
     );
   }
 
